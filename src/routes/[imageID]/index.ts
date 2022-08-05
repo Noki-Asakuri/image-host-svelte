@@ -1,4 +1,4 @@
-import { prisma } from "../../server/db/client";
+import { prisma } from "../../lib/server/client";
 import type { RequestHandler } from "./__types";
 
 export const GET: RequestHandler = async ({ params }) => {
