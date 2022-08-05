@@ -4,7 +4,7 @@ import type { RequestHandler } from "./__types";
 export const GET: RequestHandler = async ({ params }) => {
     const image = await prisma.image.findFirst({
         where: { invisibleID: params.imageID },
-        select: { publicUrl: true, author: true, name: true },
+        select: { publicUrl: true, author: true, name: true, path: true },
     });
 
     if (!image) {
@@ -13,6 +13,11 @@ export const GET: RequestHandler = async ({ params }) => {
 
     return {
         status: 200,
-        body: { image },
+        body: {
+            image: {
+                ...image,
+                publicUrl: `https://asakuri.imgix.net/${image.path}`,
+            },
+        },
     };
 };

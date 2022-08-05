@@ -7,6 +7,17 @@
     padding: 0;
 }
 
+@font-face {
+    font-family: "Firecode";
+    src: url("./lib/public/FiraCode.ttf");
+    font-display: swap;
+}
+
+body {
+    font-family: "Firecode", Courier, monospace;
+    font-weight: bold;
+}
+
 body {
     @apply bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 text-white
 }

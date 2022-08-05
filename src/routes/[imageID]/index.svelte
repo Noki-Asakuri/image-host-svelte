@@ -1,16 +1,16 @@
 <script lang="ts">
-    interface image {
+    interface UploadedImage {
         name: string;
         author: string;
         publicUrl: string;
     }
 
-    export let image: image;
+    export let image: UploadedImage;
 </script>
 
 <svelte:head>
     <title>Image Host</title>
-    <meta name="title" content="ShareX Image Host" />
+    <meta name="title" content="Image Host" />
     <meta name="author" content="Asakuri#8323" />
     <meta name="theme-color" content="#8e7489" />
     <meta name="description" content="Image Host by Asakuri#8323" />
@@ -22,9 +22,7 @@
 </svelte:head>
 
 <div class="relative flex items-center justify-center w-screen h-screen">
-    <div
-        class="relative flex justify-center items-center m-2 max-w-[80vw] max-h-[80vh]"
-    >
+    <div class="relative flex justify-center items-center m-2 max-w-[80vw] max-h-[80vh]">
         <!-- svelte-ignore a11y-img-redundant-alt -->
         <img
             alt={image.name}

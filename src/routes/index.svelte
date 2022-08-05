@@ -10,10 +10,7 @@
     let info: { key: string; author: string };
 
     let isLoading = false;
-    const createKey = async ({
-        author,
-        password,
-    }: InferMutationInput<"key.create">) => {
+    const createKey = async ({ author, password }: InferMutationInput<"key.create">) => {
         isLoading = true;
         try {
             info = await trpc.mutation("key.create", { author, password });
@@ -49,11 +46,16 @@
 </svelte:head>
 
 <div class="w-screen h-screen">
-    <div
-        class="flex flex-wrap items-center w-full h-full gap-10 pt-20 justify-evenly"
-    >
-        <Upload {createKey} {isLoading} />
-        <Info {info} />
+    <div class="flex flex-col items-center justify-center w-full h-full">
+        <div class="flex flex-col items-center justify-center gap-y-3">
+            <span class="flex items-center justify-center text-8xl"> Image host </span>
+            <p class="text-lg">Made by Asakuri#8323 with Svelte</p>
+        </div>
+
+        <div class="flex flex-wrap items-center w-full gap-10 pt-20 justify-evenly">
+            <Upload {createKey} {isLoading} />
+            <Info {info} />
+        </div>
     </div>
 </div>
 
