@@ -10,7 +10,7 @@ export const GET: RequestHandler = async () => {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
         where: { key: request.headers.get("api_key") as string },
         select: { name: true, key: true },
     });
