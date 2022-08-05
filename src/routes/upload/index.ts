@@ -5,6 +5,10 @@ import { supabase } from "$lib/server/supabase";
 
 import genID from "$lib/utils/genID";
 
+export const GET: RequestHandler = async () => {
+    return { status: 200 };
+};
+
 export const POST: RequestHandler = async ({ request }) => {
     const user = await prisma.user.findUnique({
         where: { key: request.headers.get("api_key") as string },
