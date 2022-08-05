@@ -4,9 +4,14 @@
 declare namespace App {
     // interface Locals {}
     // interface Platform {}
-    // interface PrivateEnv {}
+    interface PrivateEnv {
+        // Supabase
+        SUPABASE_KEY: string;
+
+        // Login password
+        PASSWORD: string;
+    }
     // interface PublicEnv {}
     // interface Session {}
     // interface Stuff {}
 }
-

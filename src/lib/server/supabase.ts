@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
+import { env } from "$env/dynamic/private";
 
-export const supabase = createClient(
-    "https://vhkawzjiqyrfmnfllexh.supabase.co",
-    process.env.SUPABASE_KEY as string
-).storage.from("images");
+const supabaseUrl = "https://vhkawzjiqyrfmnfllexh.supabase.co";
+
+export const supabase = createClient(supabaseUrl, env.SUPABASE_KEY).storage.from("images");

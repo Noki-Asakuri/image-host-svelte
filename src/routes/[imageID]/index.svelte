@@ -26,12 +26,11 @@
 </svelte:head>
 
 <div class="relative flex items-center justify-center w-screen h-screen">
-    <div class="relative flex justify-center items-center m-4 h-screen">
-        <!-- svelte-ignore a11y-img-redundant-alt -->
+    <div class="relative flex items-center justify-center h-screen m-4">
         <img
             alt={image.name}
             src={image.publicUrl}
-            class="relative rounded-2xl shadow-slate-400 shadow-xl h-5/6 w-auto"
+            class="relative w-auto shadow-xl rounded-2xl shadow-slate-400 h-5/6"
         />
     </div>
 </div>
