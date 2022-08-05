@@ -1,4 +1,4 @@
-import { prisma } from "../../lib/server/client";
+import { prisma } from "$lib/server/prisma";
 import type { RequestHandler } from "./__types";
 
 export const GET: RequestHandler = async ({ params }) => {
@@ -11,13 +11,5 @@ export const GET: RequestHandler = async ({ params }) => {
         return { status: 404, body: { message: "Image not found!" } };
     }
 
-    return {
-        status: 200,
-        body: {
-            image: {
-                ...image,
-                publicUrl: `https://asakuri.imgix.net/${image.path}`,
-            },
-        },
-    };
+    return { status: 200, body: { image } };
 };

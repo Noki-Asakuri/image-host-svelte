@@ -1,6 +1,6 @@
 import type { RequestHandler } from "@sveltejs/kit";
 
-import { prisma } from "$lib/server/client";
+import { prisma } from "$lib/server/prisma";
 import { supabase } from "$lib/server/supabase";
 
 import genID from "$lib/utils/genID";
@@ -18,10 +18,7 @@ export const POST: RequestHandler = async ({ request }) => {
     if (!user) {
         return {
             status: 401,
-            body: {
-                error: "Unauthorized.",
-                message: "API KEY is invalided.",
-            },
+            body: { error: "Unauthorized.", message: "API KEY is invalided." },
         };
     }
 
@@ -36,7 +33,7 @@ export const POST: RequestHandler = async ({ request }) => {
                 path: path,
                 author: user.name,
                 key: user.key,
-                publicUrl: `https://vhkawzjiqyrfmnfllexh.supabase.co/storage/v1/object/public/images/${path}`,
+                publicUrl: `https://ik.imagekit.io/gmethsnvl/${path}`,
                 imageID: imageID,
                 invisibleID: invisibleID,
             },

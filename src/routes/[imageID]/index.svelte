@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+    export const prerender = true;
+</script>
+
 <script lang="ts">
     interface UploadedImage {
         name: string;
@@ -9,8 +13,8 @@
 </script>
 
 <svelte:head>
-    <title>Image Host</title>
-    <meta name="title" content="Image Host" />
+    <title>{image.name}</title>
+    <meta name="title" content={image.name} />
     <meta name="author" content="Asakuri#8323" />
     <meta name="theme-color" content="#8e7489" />
     <meta name="description" content="Image Host by Asakuri#8323" />
@@ -22,12 +26,12 @@
 </svelte:head>
 
 <div class="relative flex items-center justify-center w-screen h-screen">
-    <div class="relative flex justify-center items-center m-2 max-w-[80vw] max-h-[80vh]">
+    <div class="relative flex justify-center items-center m-4 h-screen">
         <!-- svelte-ignore a11y-img-redundant-alt -->
         <img
             alt={image.name}
             src={image.publicUrl}
-            class="border shadow-lg h-max w-max shadow-slate-500 filter-none border-slate-600"
+            class="relative rounded-2xl shadow-slate-400 shadow-xl h-5/6 w-auto"
         />
     </div>
 </div>

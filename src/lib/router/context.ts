@@ -1,5 +1,5 @@
 import * as trpc from "@trpc/server";
-import { prisma } from "$lib/server/client";
+import { prisma } from "$lib/server/prisma";
 
 export const createContext = async () => {
     return { prisma };
