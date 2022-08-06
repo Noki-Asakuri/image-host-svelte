@@ -18,7 +18,12 @@ export const POST: RequestHandler = async ({ request }) => {
     if (!user) {
         return {
             status: 401,
-            body: { error: "Unauthorized.", message: "API KEY is invalided." },
+            body: {
+                error: {
+                    code: "Unauthorized.",
+                    message: "API KEY is invalided.",
+                },
+            },
         };
     }
 
@@ -33,7 +38,7 @@ export const POST: RequestHandler = async ({ request }) => {
                 path: path,
                 author: user.name,
                 key: user.key,
-                publicUrl: `https://ik.imagekit.io/gmethsnvl/${path}`,
+                publicUrl: `https://ik.imagekit.io/gmethsnvl/asakuri/${path}`,
                 imageID: imageID,
                 invisibleID: invisibleID,
             },
