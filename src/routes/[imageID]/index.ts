@@ -1,11 +1,13 @@
 import { prisma } from "$lib/server/prisma";
 import type { RequestHandler } from "./__types";
 
-export const GET: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params, request }) => {
     const image = await prisma.image.findFirst({
         where: { invisibleID: params.imageID },
         select: { publicUrl: true, author: true, name: true, path: true },
     });
+
+    console.log({ headers: request.headers });
 
     if (!image) {
         return {
