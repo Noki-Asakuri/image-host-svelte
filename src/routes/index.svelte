@@ -10,7 +10,7 @@
     let info: InferMutationOutput<"key.create">;
     let isLoading = false;
     let ogImageUrl =
-        "https://cdn.discordapp.com/avatars/188903265931362304/92aafdaa50ec6e45597aaafd54d1a2ef.png?size=4096";
+        "https://cdn.discordapp.com/avatars/188903265931362304/b6a17034ea1169bf311d85e0fa0c2996.png?size=4096";
 
     const createKey = async ({ user, password }: InferMutationInput<"key.create">) => {
         isLoading = true;
