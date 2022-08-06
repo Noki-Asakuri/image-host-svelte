@@ -31,9 +31,13 @@ export const POST: RequestHandler = async ({ request }) => {
     const image = (await request.formData()).get("image") as File;
     const { imageID, invisibleID, path } = genID(image.type.split("/")[1], user.name);
 
-    const sharpImage = sharp(new Buffer(await image.arrayBuffer()))
-        .webp({ effort: 3, quality: 70, alphaQuality: 70 })
-        .toFormat("webp");
+    const sharpImage = sharp(Buffer.from(await image.arrayBuffer()));
+    const { width } = await sharpImage.metadata();
+
+    if (width && width > 2028) {
+        sharpImage.resize(2028);
+    }
+    sharpImage.webp({ effort: 3, quality: 85, alphaQuality: 90 });
 
     await Promise.all([
         prisma.image.create({
@@ -80,6 +84,6 @@ export const POST: RequestHandler = async ({ request }) => {
             Connection: "keep-alive",
             "Content-Type": "text/plain",
         },
-        body: `${link}`,
+        body: link,
     };
 };
