@@ -4,13 +4,12 @@
 
     import Upload from "$lib/components/Upload.svelte";
     import Info from "$lib/components/Info.svelte";
+    import { ogImageUrl } from "$lib/store/image";
 
     import { SvelteToast, toast } from "@zerodevx/svelte-toast";
 
     let info: InferMutationOutput<"key.create">;
     let isLoading = false;
-    let ogImageUrl =
-        "https://cdn.discordapp.com/avatars/188903265931362304/b6a17034ea1169bf311d85e0fa0c2996.png?size=4096";
 
     const createKey = async ({ user, password }: InferMutationInput<"key.create">) => {
         isLoading = true;
@@ -36,14 +35,11 @@
 <svelte:head>
     <title>Image Host</title>
     <meta name="title" content="Image Host" />
-    <meta name="author" content="Asakuri#8323" />
-    <meta name="theme-color" content="#8e7489" />
-    <meta name="description" content="Image Host by Asakuri#8323" />
 
     <meta property="og:title" content="Image Host" />
     <meta property="og:site_name" content="Asakuri#8323" />
     <meta property="og:description" content="A image host made by Asakuri#8323 with svelte." />
-    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image" content={$ogImageUrl} />
 </svelte:head>
 
 <div class="w-screen h-screen">

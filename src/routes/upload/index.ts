@@ -1,4 +1,5 @@
 import type { RequestHandler } from "@sveltejs/kit";
+import sharp from "sharp";
 
 import { prisma } from "$lib/server/prisma";
 import { supabase } from "$lib/server/supabase";
@@ -30,6 +31,10 @@ export const POST: RequestHandler = async ({ request }) => {
     const image = (await request.formData()).get("image") as File;
     const { imageID, invisibleID, path } = genID(image.type.split("/")[1], user.name);
 
+    const sharpImage = sharp(new Buffer(await image.arrayBuffer()))
+        .webp({ effort: 3, quality: 70, alphaQuality: 70 })
+        .toFormat("webp");
+
     await Promise.all([
         prisma.image.create({
             data: {
@@ -38,14 +43,17 @@ export const POST: RequestHandler = async ({ request }) => {
                 path: path,
                 author: user.name,
                 key: user.key,
-                publicUrl: `https://ik.imagekit.io/gmethsnvl/asakuri/${path}`,
+                // todo: prob remove this in future?
+                // publicUrl: `https://ik.imagekit.io/gmethsnvl/asakuri/${path}`,
+                publicUrl: `https://vhkawzjiqyrfmnfllexh.supabase.co/storage/v1/object/public/images/${path}`,
                 imageID: imageID,
                 invisibleID: invisibleID,
             },
         }),
-        supabase.upload(path, await image.arrayBuffer(), {
-            contentType: image.type,
-            cacheControl: `${30 * 24 * 60 * 60}`,
+        supabase.upload(path, await sharpImage.toBuffer(), {
+            contentType: "image/webp",
+            cacheControl: "3600",
+            upsert: false,
         }),
     ]);
 
