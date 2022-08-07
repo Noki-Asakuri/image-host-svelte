@@ -1,9 +1,11 @@
 import type { RequestHandler } from "@sveltejs/kit";
+import sharp from "sharp";
 
 import { prisma } from "$lib/server/prisma";
 import { supabase } from "$lib/server/supabase";
 
 import genID from "$lib/utils/genID";
+import { env } from "$env/dynamic/private";
 
 export const GET: RequestHandler = async () => {
     return { status: 200 };
@@ -30,6 +32,14 @@ export const POST: RequestHandler = async ({ request }) => {
     const image = (await request.formData()).get("image") as File;
     const { imageID, invisibleID, path } = genID(image.type.split("/")[1], user.name);
 
+    const sharpImage = sharp(Buffer.from(await image.arrayBuffer()));
+    const { width } = await sharpImage.metadata();
+
+    if (width && width > 2028) {
+        sharpImage.resize(2028);
+    }
+    sharpImage.webp({ effort: 3, quality: 85, alphaQuality: 90 });
+
     await Promise.all([
         prisma.image.create({
             data: {
@@ -38,14 +48,17 @@ export const POST: RequestHandler = async ({ request }) => {
                 path: path,
                 author: user.name,
                 key: user.key,
-                publicUrl: `https://ik.imagekit.io/gmethsnvl/asakuri/${path}`,
+                // todo: prob remove this in future?
+                // publicUrl: `https://ik.imagekit.io/gmethsnvl/asakuri/${path}`,
+                publicUrl: `${env.SUPABASE_URL}/storage/v1/object/public/images/${path}`,
                 imageID: imageID,
                 invisibleID: invisibleID,
             },
         }),
-        supabase.upload(path, await image.arrayBuffer(), {
-            contentType: image.type,
-            cacheControl: `${30 * 24 * 60 * 60}`,
+        supabase.upload(path, await sharpImage.toBuffer(), {
+            contentType: "image/webp",
+            cacheControl: "3600",
+            upsert: false,
         }),
     ]);
 
@@ -72,6 +85,6 @@ export const POST: RequestHandler = async ({ request }) => {
             Connection: "keep-alive",
             "Content-Type": "text/plain",
         },
-        body: `${link}`,
+        body: link,
     };
 };

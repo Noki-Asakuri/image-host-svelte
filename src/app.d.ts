@@ -7,6 +7,7 @@ declare namespace App {
     interface PrivateEnv {
         // Supabase
         SUPABASE_KEY: string;
+        SUPABASE_URL: string;
 
         // Login password
         PASSWORD: string;

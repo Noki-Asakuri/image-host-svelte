@@ -4,7 +4,7 @@ import type { RequestHandler } from "./__types";
 export const GET: RequestHandler = async ({ params }) => {
     const image = await prisma.image.findFirst({
         where: { invisibleID: params.imageID },
-        select: { publicUrl: true, author: true, name: true, path: true },
+        select: { publicUrl: true, author: true, name: true },
     });
 
     if (!image) {
@@ -20,9 +20,6 @@ export const GET: RequestHandler = async ({ params }) => {
     return {
         status: 200,
         body: { image },
-        headers: {
-            "Keep-Alive": "timeout=86400",
-            Connection: "keep-alive",
-        },
+        headers: { "Keep-Alive": "timeout=86400", Connection: "keep-alive" },
     };
 };

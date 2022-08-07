@@ -15,9 +15,6 @@
 <svelte:head>
     <title>{image.name}</title>
     <meta name="title" content={image.name} />
-    <meta name="author" content="Asakuri#8323" />
-    <meta name="theme-color" content="#8e7489" />
-    <meta name="description" content="Image Host by Asakuri#8323" />
 
     <meta content={image.name} property="og:title" />
     <meta content={image.author} property="og:site_name" />
@@ -30,7 +27,10 @@
         <img
             alt={image.name}
             src={image.publicUrl}
-            class="relative w-auto shadow-xl rounded-2xl shadow-slate-400 h-5/6"
+            loading="lazy"
+            decoding="async"
+            data-nimg="future"
+            class="relative w-auto shadow-xl rounded-2xl shadow-slate-400 max-h-[85%]"
         />
     </div>
 </div>
