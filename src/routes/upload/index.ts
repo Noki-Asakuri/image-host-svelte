@@ -5,6 +5,7 @@ import { prisma } from "$lib/server/prisma";
 import { supabase } from "$lib/server/supabase";
 
 import genID from "$lib/utils/genID";
+import { env } from "$env/dynamic/private";
 
 export const GET: RequestHandler = async () => {
     return { status: 200 };
@@ -49,7 +50,7 @@ export const POST: RequestHandler = async ({ request }) => {
                 key: user.key,
                 // todo: prob remove this in future?
                 // publicUrl: `https://ik.imagekit.io/gmethsnvl/asakuri/${path}`,
-                publicUrl: `https://vhkawzjiqyrfmnfllexh.supabase.co/storage/v1/object/public/images/${path}`,
+                publicUrl: `${env.SUPABASE_URL}/storage/v1/object/public/images/${path}`,
                 imageID: imageID,
                 invisibleID: invisibleID,
             },
