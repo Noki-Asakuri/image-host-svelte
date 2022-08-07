@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { toast } from "@zerodevx/svelte-toast";
+    import { toast } from "svelte-french-toast";
 
     interface Info {
         key: string;
@@ -17,18 +17,12 @@
             isCopy = false;
         }, 2000);
 
-        toast.push("Copied key into clipboard!", {
-            duration: 2000,
-            theme: {
-                "--toastWidth": "max-content",
-                "--toastBackground": "#262626",
-                "--toastBarBackground": "#E8DCFF",
-                "--toastBorderRadius": "0.5rem",
-                "--toastPadding": "0.5rem",
-            },
-        });
-
         navigator.clipboard.writeText(info.key);
+        toast.success(`Copied key to clipboard!`, {
+            duration: 2000,
+            position: "top-right",
+            style: "border-radius: 10px; background: #262626; color: #E8DCFF",
+        });
     };
 </script>
 
