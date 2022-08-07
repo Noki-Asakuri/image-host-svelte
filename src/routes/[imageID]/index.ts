@@ -1,13 +1,11 @@
 import { prisma } from "$lib/server/prisma";
 import type { RequestHandler } from "./__types";
 
-export const GET: RequestHandler = async ({ params, request }) => {
+export const GET: RequestHandler = async ({ params }) => {
     const image = await prisma.image.findFirst({
         where: { invisibleID: params.imageID },
-        select: { publicUrl: true, author: true, name: true, path: true },
+        select: { publicUrl: true, author: true, name: true },
     });
-
-    console.log({ headers: request.headers });
 
     if (!image) {
         return {
@@ -22,9 +20,6 @@ export const GET: RequestHandler = async ({ params, request }) => {
     return {
         status: 200,
         body: { image },
-        headers: {
-            "Keep-Alive": "timeout=86400",
-            Connection: "keep-alive",
-        },
+        headers: { "Keep-Alive": "timeout=86400", Connection: "keep-alive" },
     };
 };
