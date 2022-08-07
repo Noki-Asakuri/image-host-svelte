@@ -6,7 +6,7 @@
     import Info from "$lib/components/Info.svelte";
     import { ogImageUrl } from "$lib/store/image";
 
-    import { SvelteToast, toast } from "@zerodevx/svelte-toast";
+    import toast, { Toaster } from "svelte-french-toast";
 
     let info: InferMutationOutput<"key.create">;
     let isLoading = false;
@@ -16,15 +16,10 @@
         try {
             info = await trpc.mutation("key.create", { user, password });
         } catch (err) {
-            toast.push(`${err}`.split(":")[1], {
+            toast.error(`${err}`.split(":")[1], {
                 duration: 2000,
-                theme: {
-                    "--toastWidth": "max-content",
-                    "--toastBackground": "#F56565",
-                    "--toastBarBackground": "#C53030",
-                    "--toastBorderRadius": "0.5rem",
-                    "--toastPadding": "0.5rem",
-                },
+                position: "top-right",
+                style: "border-radius: 10px; background-color: #333; color: #E8DCFF",
             });
         } finally {
             isLoading = false;
@@ -54,5 +49,5 @@
             <Info {info} />
         </div>
     </div>
-    <SvelteToast />
+    <Toaster />
 </div>
