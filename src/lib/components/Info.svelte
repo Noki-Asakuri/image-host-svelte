@@ -35,29 +35,25 @@
             <span>Create a key to see info!</span>
         </div>
     {:else}
-        <ul class="flex flex-col w-full gap-y-3">
-            <li>
-                <div class="flex items-center justify-start gap-2 ">
-                    <span class="flex items-center justify-center gap-2">
-                        Key: {info.key}
-                    </span>
-                    <button
-                        class="absolute p-3 transition-all duration-500 top-2 right-2 rounded-xl hover:bg-slate-700"
-                        on:click={copyFunc}
-                    >
-                        {#if isCopy}
-                            Copied
-                        {:else}
-                            Copy
-                        {/if}
-                    </button>
-                </div>
-            </li>
-            <li>
-                <div class="flex items-center justify-start gap-2">
-                    User: {info.user}
-                </div>
-            </li>
-        </ul>
+        <div class="flex flex-col w-full gap-y-3">
+            <div class="flex items-center justify-start gap-2 ">
+                <span class="flex items-center justify-center gap-2">
+                    Key: {info.key}
+                </span>
+                <button
+                    class="absolute p-3 transition-all duration-500 top-2 right-2 rounded-xl hover:bg-slate-700"
+                    on:click={copyFunc}
+                >
+                    {#if isCopy}
+                        Copied
+                    {:else}
+                        Copy
+                    {/if}
+                </button>
+            </div>
+            <div class="flex items-center justify-start gap-2">
+                User: {info.user}
+            </div>
+        </div>
     {/if}
 </div>
