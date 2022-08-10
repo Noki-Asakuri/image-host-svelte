@@ -1,7 +1,3 @@
-<script lang="ts" context="module">
-    export const prerender = true;
-</script>
-
 <script lang="ts">
     interface UploadedImage {
         name: string;
@@ -27,9 +23,7 @@
         <img
             alt={image.name}
             src={image.publicUrl}
-            loading="lazy"
             decoding="async"
-            data-nimg="future"
             class="relative w-auto shadow-xl rounded-2xl shadow-slate-400 max-h-[85%]"
         />
     </div>
