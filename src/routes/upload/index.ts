@@ -12,8 +12,14 @@ export const GET: RequestHandler = async () => {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
+    const API_KEY = request.headers.get("api_key");
+
+    if (!API_KEY) {
+        return { status: 400, body: { error: "Bad Request.", message: "API Key is required." } };
+    }
+
     const user = await prisma.user.findFirst({
-        where: { key: request.headers.get("api_key") as string },
+        where: { key: API_KEY },
         select: { name: true, key: true },
     });
 
@@ -28,10 +34,19 @@ export const POST: RequestHandler = async ({ request }) => {
             },
         };
     }
-
+    const allowedImageTypes = ["image/png", "image/jpeg", "image/webp"];
     const image = (await request.formData()).get("image") as File;
-    const { imageID, invisibleID, path } = genID(image.type.split("/")[1], user.name);
+    if (!allowedImageTypes.includes(image.type)) {
+        return {
+            status: 400,
+            body: {
+                error: "Bad Request.",
+                message: "Only accept image with type: png, jpg and webp.",
+            },
+        };
+    }
 
+    const { imageID, invisibleID, path } = genID(image.type.split("/")[1], user.name);
     const sharpImage = sharp(Buffer.from(await image.arrayBuffer()));
     const { width } = await sharpImage.metadata();
 
@@ -40,6 +55,7 @@ export const POST: RequestHandler = async ({ request }) => {
     }
     sharpImage.webp({ effort: 3, quality: 85, alphaQuality: 90 });
 
+    // todo: Fix gif not uploading to supabase storage.
     await Promise.all([
         prisma.image.create({
             data: {
@@ -48,8 +64,6 @@ export const POST: RequestHandler = async ({ request }) => {
                 path: path,
                 author: user.name,
                 key: user.key,
-                // todo: prob remove this in future?
-                // publicUrl: `https://ik.imagekit.io/gmethsnvl/asakuri/${path}`,
                 publicUrl: `${env.SUPABASE_URL}/storage/v1/object/public/images/${path}`,
                 imageID: imageID,
                 invisibleID: invisibleID,
@@ -58,7 +72,6 @@ export const POST: RequestHandler = async ({ request }) => {
         supabase.upload(path, await sharpImage.toBuffer(), {
             contentType: "image/webp",
             cacheControl: "3600",
-            upsert: false,
         }),
     ]);
 
