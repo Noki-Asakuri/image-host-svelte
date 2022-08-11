@@ -1,7 +1,3 @@
-<script lang="ts" context="module">
-    export const prerender = true;
-</script>
-
 <script lang="ts">
     interface UploadedImage {
         name: string;
@@ -10,11 +6,16 @@
     }
 
     export let image: UploadedImage;
+    export let message: string;
 </script>
 
 <svelte:head>
     <title>{image.name}</title>
     <meta name="title" content={image.name} />
+
+    {#if message}
+        <meta content={message} property="og:description" />
+    {/if}
 
     <meta content={image.name} property="og:title" />
     <meta content={image.author} property="og:site_name" />
@@ -27,10 +28,9 @@
         <img
             alt={image.name}
             src={image.publicUrl}
-            loading="lazy"
             decoding="async"
-            data-nimg="future"
             class="relative w-auto shadow-xl rounded-2xl shadow-slate-400 max-h-[85%]"
         />
     </div>
 </div>
+
