@@ -6,11 +6,16 @@
     }
 
     export let image: UploadedImage;
+    export let message: string;
 </script>
 
 <svelte:head>
     <title>{image.name}</title>
     <meta name="title" content={image.name} />
+
+    {#if message}
+        <meta content={message} property="og:description" />
+    {/if}
 
     <meta content={image.name} property="og:title" />
     <meta content={image.author} property="og:site_name" />
