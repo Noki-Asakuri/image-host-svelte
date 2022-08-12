@@ -1,30 +1,30 @@
 <script lang="ts">
-    import { trpc } from "$lib/utils/trpc";
-    import type { InferMutationInput, InferMutationOutput } from "$lib/utils/trpc";
+    // import { trpc } from "$lib/utils/trpc";
+    // import type { InferMutationInput, InferMutationOutput } from "$lib/utils/trpc";
 
-    import Upload from "$lib/components/Upload.svelte";
-    import Info from "$lib/components/Info.svelte";
+    // import Upload from "$lib/components/Upload.svelte";
+    // import Info from "$lib/components/Info.svelte";
     import { ogImageUrl } from "$lib/store/image";
 
-    import toast, { Toaster } from "svelte-french-toast";
+    // import toast, { Toaster } from "svelte-french-toast";
 
-    let info: InferMutationOutput<"key.create">;
-    let isLoading = false;
+    // let info: InferMutationOutput<"key.create">;
 
-    const createKey = async ({ user, password }: InferMutationInput<"key.create">) => {
-        isLoading = true;
-        try {
-            info = await trpc.mutation("key.create", { user, password });
-        } catch (err) {
-            toast.error(`${err}`.split(":")[1], {
-                duration: 2000,
-                position: "top-right",
-                style: "border-radius: 10px; background-color: #333; color: #E8DCFF",
-            });
-        } finally {
-            isLoading = false;
-        }
-    };
+    // let isLoading = false;
+    // const createKey = async ({ user, password }: InferMutationInput<"key.create">) => {
+    //     isLoading = true;
+    //     try {
+    //         info = await trpc.mutation("key.create", { user, password });
+    //     } catch (err) {
+    //         toast.error(`${err}`.split(":")[1], {
+    //             duration: 2000,
+    //             position: "top-right",
+    //             style: "border-radius: 10px; background-color: #333; color: #E8DCFF",
+    //         });
+    //     } finally {
+    //         isLoading = false;
+    //     }
+    // };
 </script>
 
 <svelte:head>
@@ -44,10 +44,13 @@
             <span class="text-lg">Made by Asakuri#8323 with Svelte</span>
         </div>
 
-        <div class="flex flex-wrap items-center w-full gap-10 pt-20 justify-evenly">
+        <!-- <div class="flex flex-wrap items-center w-full gap-10 pt-20 justify-evenly">
             <Upload {createKey} {isLoading} />
             <Info {info} />
+        </div> -->
+        <div class="flex flex-wrap items-center w-full gap-10 pt-20 justify-evenly">
+            Under testing.
         </div>
     </div>
-    <Toaster />
+    <!-- <Toaster /> -->
 </div>

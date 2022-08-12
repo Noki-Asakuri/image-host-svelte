@@ -6,7 +6,7 @@ const config = {
     // Consult https://github.com/sveltejs/svelte-preprocess
     // for more information about preprocessors
     preprocess: [preprocess({ postcss: true })],
-    kit: { adapter: adapter({ split: true, edge: true }), files: { hooks: "src/hook" } },
+    kit: { adapter: adapter({ split: true, edge: true }) },
 };
 
 export default config;
