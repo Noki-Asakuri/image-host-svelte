@@ -11,7 +11,7 @@
         "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
         "lint": "prettier --check --plugin-search-dir=. . && eslint .",
         "format": "prettier --write --plugin-search-dir=. .",
-        "postinstall": "prisma generate"
+        "postinstall": "prisma generate --data-proxy"
     },
     "devDependencies": {
         "@sveltejs/adapter-auto": "next",
