@@ -33,18 +33,18 @@
 
     <meta property="og:title" content="Image Host" />
     <meta property="og:site_name" content="Asakuri#8323" />
-    <meta property="og:description" content="A image host made by Asakuri#8323 with svelte." />
+    <meta property="og:description" content="A image host made by Asakuri#8323 with Svelte." />
     <meta property="og:image" content={$ogImageUrl} />
 </svelte:head>
 
-<div class="w-screen h-screen">
-    <div class="flex flex-col items-center justify-center w-full h-full">
+<div class="h-screen w-screen">
+    <div class="flex h-full w-full flex-col items-center justify-center">
         <div class="flex flex-col items-center justify-center gap-y-7">
-            <span class="flex items-center justify-center text-7xl">Image host</span>
+            <span class="flex items-center justify-center text-7xl">Image Host</span>
             <span class="text-lg">Made by Asakuri#8323 with Svelte</span>
         </div>
 
-        <div class="flex flex-wrap items-center w-full gap-10 pt-20 justify-evenly">
+        <div class="flex w-full flex-wrap items-center justify-evenly gap-10 pt-20">
             <Upload {createKey} {isLoading} />
             <Info {info} />
         </div>

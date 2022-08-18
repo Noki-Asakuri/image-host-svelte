@@ -1,21 +1,29 @@
-import type { RequestHandler } from "@sveltejs/kit";
+import type { RequestHandler } from "./$types";
+import { error } from "@sveltejs/kit";
 import sharp from "sharp";
 
 import { prisma } from "$lib/server/prisma";
 import { supabase } from "$lib/server/supabase";
 
 import genID from "$lib/utils/genID";
-import { env } from "$env/dynamic/private";
+import { SUPABASE_URL } from "$env/static/private";
 
 export const GET: RequestHandler = async () => {
-    return { status: 200 };
+    return new Response(JSON.stringify({ message: "Make a POST requests to upload image." }), {
+        status: 501,
+        headers: {
+            "Keep-Alive": "timeout=86400",
+            Connection: "keep-alive",
+            "Content-Type": "application/json",
+        },
+    });
 };
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, url }) => {
     const API_KEY = request.headers.get("api_key");
 
     if (!API_KEY) {
-        return { status: 400, body: { error: "Bad Request.", message: "API Key is required." } };
+        throw error(400, "API Key is required.");
     }
 
     const user = await prisma.user.findFirst({
@@ -24,26 +32,14 @@ export const POST: RequestHandler = async ({ request }) => {
     });
 
     if (!user) {
-        return {
-            status: 401,
-            body: {
-                error: {
-                    code: "Unauthorized.",
-                    message: "API KEY is invalided.",
-                },
-            },
-        };
+        throw error(401, "API KEY is invalided.");
     }
+
     const allowedImageTypes = ["image/png", "image/jpeg", "image/webp"];
     const image = (await request.formData()).get("image") as File;
+
     if (!allowedImageTypes.includes(image.type)) {
-        return {
-            status: 400,
-            body: {
-                error: "Bad Request.",
-                message: "Only accept image with type: png, jpg and webp.",
-            },
-        };
+        throw error(400, "Only accept image with type: png, jpg and webp.");
     }
 
     const { imageID, invisibleID, path } = genID(image.type.split("/")[1], user.name);
@@ -64,7 +60,7 @@ export const POST: RequestHandler = async ({ request }) => {
                 path: path,
                 author: user.name,
                 key: user.key,
-                publicUrl: `${env.SUPABASE_URL}/storage/v1/object/public/images/${path}`,
+                publicUrl: `${SUPABASE_URL}/storage/v1/object/public/images/${path}`,
                 imageID: imageID,
                 invisibleID: invisibleID,
             },
@@ -75,29 +71,25 @@ export const POST: RequestHandler = async ({ request }) => {
         }),
     ]);
 
-    const link =
-        (process.env.VERCEL_URL ? "https://" : "http://") +
-        `${request.headers.get("host")}/${invisibleID}`;
+    const link = `${url.origin}/${invisibleID}`;
 
     if (!request.headers.get("local")) {
-        return {
+        return new Response(JSON.stringify({ link }), {
             status: 200,
             headers: {
                 "Keep-Alive": "timeout=86400",
                 Connection: "keep-alive",
                 "Content-Type": "application/json",
             },
-            body: { link },
-        };
+        });
     }
 
-    return {
+    return new Response(link, {
         status: 200,
         headers: {
             "Keep-Alive": "timeout=86400",
             Connection: "keep-alive",
             "Content-Type": "text/plain",
         },
-        body: link,
-    };
+    });
 };
