@@ -13,5 +13,5 @@ export const load: PageServerLoad = async ({ params }) => {
         throw error(404, "Unable to found image with provided ID.");
     }
 
-    throw redirect(308, `/i/${image.imageID}`);
+    throw redirect(307, `/i/${image.imageID}`);
 };

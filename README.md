@@ -2,6 +2,10 @@
 
 A ShareX Image Uploader with discord embed message.
 
+## Deploy with vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fiahacker123%2Fimage-host-svelte&env=DATABASE_URL,SUPABASE_KEY,SUPABASE_URL,PASSWORD)
+
 ## Required Environment Variables
 
 ```js
@@ -15,7 +19,3 @@ SUPABASE_URL="Supabase Project URL"
 # Password
 PASSWORD="Password to create api key"
 ```
-
-## Deploy with vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fiahacker123%2Fimage-host-svelte&env=DATABASE_URL,SUPABASE_KEY,SUPABASE_URL,PASSWORD)

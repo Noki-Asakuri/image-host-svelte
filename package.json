@@ -38,7 +38,7 @@
     "type": "module",
     "dependencies": {
         "@prisma/client": "^4.2.1",
-        "@supabase/supabase-js": "^1.35.6",
+        "@supabase/storage-js": "^1.7.3",
         "@trpc/client": "^9.27.0",
         "@trpc/server": "^9.27.0",
         "sharp": "^0.30.7",

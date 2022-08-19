@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createRouter } from "../context";
 
-import { env } from "$env/dynamic/private";
+import { PASSWORD } from "$env/static/private";
 import { TRPCError } from "@trpc/server";
 
 export const keyRouter = createRouter().mutation("create", {
@@ -17,7 +17,7 @@ export const keyRouter = createRouter().mutation("create", {
             throw new TRPCError({ code: "BAD_REQUEST", message: "User is incorrect!" });
         }
 
-        if (password !== env.PASSWORD) {
+        if (password !== PASSWORD) {
             throw new TRPCError({ code: "UNAUTHORIZED", message: "Password is incorrect!" });
         }
 
