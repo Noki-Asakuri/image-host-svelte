@@ -20,7 +20,7 @@
             alt={data.name}
             src={data.publicUrl}
             decoding="async"
-            class="relative h-5/6 w-auto rounded-xl shadow-xl shadow-slate-400"
+            class="relative max-h-[85%] w-auto rounded-xl shadow-xl shadow-slate-400"
         />
     </div>
 </div>
