@@ -14,11 +14,11 @@
         "postinstall": "prisma generate"
     },
     "devDependencies": {
-        "@sveltejs/adapter-auto": "next",
-        "@sveltejs/kit": "next",
+        "@sveltejs/adapter-auto": "1.0.0-next.66",
+        "@sveltejs/kit": "1.0.0-next.437",
         "@types/sharp": "^0.30.5",
-        "@typescript-eslint/eslint-plugin": "^5.33.1",
-        "@typescript-eslint/parser": "^5.33.1",
+        "@typescript-eslint/eslint-plugin": "^5.35.1",
+        "@typescript-eslint/parser": "^5.35.1",
         "autoprefixer": "^10.4.8",
         "eslint": "^8.22.0",
         "eslint-plugin-svelte3": "^4.0.0",
@@ -33,14 +33,14 @@
         "tailwindcss": "^3.1.8",
         "tslib": "^2.4.0",
         "typescript": "^4.7.4",
-        "vite": "^3.0.8"
+        "vite": "^3.0.9"
     },
     "type": "module",
     "dependencies": {
         "@prisma/client": "^4.2.1",
         "@supabase/storage-js": "^1.7.3",
-        "@trpc/client": "^9.27.0",
-        "@trpc/server": "^9.27.0",
+        "@trpc/client": "^9.27.2",
+        "@trpc/server": "^9.27.2",
         "sharp": "^0.30.7",
         "trpc-sveltekit": "^2.3.0",
         "zod": "^3.18.0"
