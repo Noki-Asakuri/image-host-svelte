@@ -15,12 +15,10 @@
 </svelte:head>
 
 <div class="relative flex h-screen w-screen items-center justify-center">
-    <div class="relative m-4 flex h-full items-center justify-center">
-        <img
-            alt={data.name}
-            src={data.publicUrl}
-            decoding="async"
-            class="relative max-h-[85%] w-auto rounded-xl shadow-xl shadow-slate-400"
-        />
-    </div>
+    <img
+        alt={data.name}
+        src={data.publicUrl}
+        decoding="async"
+        class="relative max-h-[85vh] w-auto max-w-[85vw] rounded-lg shadow-xl shadow-slate-400"
+    />
 </div>
