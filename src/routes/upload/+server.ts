@@ -1,45 +1,34 @@
-import type { RequestHandler } from "./$types";
-import { error } from "@sveltejs/kit";
 import sharp from "sharp";
+import type { RequestHandler } from "./$types";
 
 import { prisma } from "$lib/server/prisma";
 import { supabase } from "$lib/server/supabase";
 
-import genID from "$lib/utils/genID";
 import { SUPABASE_URL } from "$env/static/private";
+import { errorReponse } from "$lib/utils/errorResponse";
+import { genID } from "$lib/utils/genID";
 
 export const GET: RequestHandler = async () => {
-    return new Response(JSON.stringify({ message: "Make a POST requests to upload image." }), {
-        status: 501,
-        headers: {
-            "Keep-Alive": "timeout=86400",
-            Connection: "keep-alive",
-            "Content-Type": "application/json",
-        },
-    });
+    return errorReponse(501, "Make a POST request to upload.");
 };
 
 export const POST: RequestHandler = async ({ request, url }) => {
     const API_KEY = request.headers.get("api_key");
 
-    if (!API_KEY) {
-        throw error(400, "API Key is required.");
-    }
+    if (!API_KEY) return errorReponse(400, "API Key is required.");
 
     const user = await prisma.user.findFirst({
         where: { key: API_KEY },
         select: { name: true, key: true },
     });
 
-    if (!user) {
-        throw error(401, "API KEY is invalided.");
-    }
+    if (!user) return errorReponse(401, "API KEY is invalided.");
 
     const allowedImageTypes = ["image/png", "image/jpeg", "image/webp"];
     const image = (await request.formData()).get("image") as File;
 
     if (!allowedImageTypes.includes(image.type)) {
-        throw error(400, "Only accept image with type: png, jpg and webp.");
+        return errorReponse(400, "Only accept image with type: png, jpg and webp.");
     }
 
     const { imageID, invisibleID, path } = genID(image.type.split("/")[1], user.name);
@@ -67,14 +56,14 @@ export const POST: RequestHandler = async ({ request, url }) => {
         }),
         supabase.upload(path, await sharpImage.toBuffer(), {
             contentType: "image/webp",
-            cacheControl: "3600",
+            cacheControl: "86400",
         }),
     ]);
 
     const link = `${url.origin}/${invisibleID}`;
 
     if (!request.headers.get("local")) {
-        return new Response(JSON.stringify({ link }), {
+        return new Response(JSON.stringify({ link, delete: `${url.origin}/i/${imageID}/delete` }), {
             status: 200,
             headers: {
                 "Keep-Alive": "timeout=86400",
