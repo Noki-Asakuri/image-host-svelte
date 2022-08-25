@@ -1,4 +1,4 @@
-export default function genID(fileExt: string, author: string, length = 20) {
+export const genID = (fileExt: string, author: string, length = 20) => {
     let imageID = "";
     let invisibleID = "";
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -16,4 +16,4 @@ export default function genID(fileExt: string, author: string, length = 20) {
         file: `${imageID}.${fileExt}`,
         path: `${author.split("#")[0]}/${imageID}.${fileExt}`,
     };
-}
+};
