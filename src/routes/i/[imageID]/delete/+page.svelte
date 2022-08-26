@@ -2,19 +2,23 @@
     import { trpc } from "$lib/utils/trpc";
     import type { PageData } from "./$types";
 
-    import { goto } from "$app/navigation";
     import toast, { Toaster } from "svelte-french-toast";
     import { linear } from "svelte/easing";
     import { fade } from "svelte/transition";
 
     export let data: PageData;
+    let isShow = false;
+    let isDeleted = false;
 
-    let hidden = true;
+    const mutation = async () => {
+        await trpc.mutation("image.delete", { imageID: data.imageID, path: data.path });
+        isDeleted = true;
+    };
 
     const deleteImage = async () => {
-        hidden = true;
+        isShow = false;
         await toast.promise(
-            trpc.mutation("image.delete", { imageID: data.imageID, path: data.path }),
+            mutation(),
             {
                 loading: "Deleting ...",
                 error: "Unable to delete image.",
@@ -25,51 +29,61 @@
                 style: "border-radius: 10px; background: #262626; color: #E8DCFF",
             },
         );
-
-        setTimeout(() => goto("/"), 2500);
     };
 </script>
 
 <svelte:head>
-    <title>{data.name}</title>
-    <meta name="title" content={data.name} />
+    {#if !isDeleted}
+        <title>{data.name}</title>
+        <meta name="title" content={data.name} />
 
-    <meta content={data.name} property="og:title" />
-    <meta content={data.author} property="og:site_name" />
-    <meta content={data.publicUrl} property="og:image" />
-    <meta name="twitter:card" content="summary_large_image" />
+        <meta content={data.name} property="og:title" />
+        <meta content={data.author} property="og:site_name" />
+        <meta content={data.publicUrl} property="og:image" />
+        <meta name="twitter:card" content="summary_large_image" />
+    {:else}
+        <title>Image Deleted</title>
+        <meta name="title" content="Image Deleted" />
+    {/if}
 </svelte:head>
 
 <div class="relative flex h-screen w-screen items-center justify-center">
     <div class="relative m-4 flex h-full flex-col items-center justify-center gap-y-20">
-        <img
-            alt={data.name}
-            src={data.publicUrl}
-            decoding="async"
-            class="relative max-h-[40rem] w-auto rounded-xl shadow-xl shadow-slate-400"
-        />
-        <div>
+        <div class="relative flex h-[40rem] max-h-max items-center justify-center">
+            <img
+                alt={data.name}
+                src={isDeleted
+                    ? "https://via.placeholder.com/1920x1080?text=Image+Deleted"
+                    : data.publicUrl}
+                decoding="async"
+                class="relative max-h-full w-auto rounded-xl shadow-xl shadow-slate-400"
+            />
+        </div>
+
+        {#if !isDeleted}
             <button
-                on:click={() => (hidden = false)}
+                on:click={() => (isShow = true)}
                 class="rounded-lg bg-red-600 p-2 text-lg hover:bg-red-500"
             >
-                Delete image
+                Click to delete
             </button>
-        </div>
-        {#if !hidden}
+        {/if}
+        {#if isShow}
             <div
                 transition:fade={{ duration: 300, easing: linear }}
-                on:click={() => (hidden = true)}
-                class="absolute h-screen w-screen bg-black/50"
+                on:click={() => (isShow = false)}
+                class="absolute h-screen w-screen bg-black/60"
             />
-            <div class="absolute z-50 max-w-xs" transition:fade={{ duration: 300, easing: linear }}>
-                <div class="flex flex-col gap-3 rounded-lg bg-gray-600 p-3">
+            <div class="absolute z-50" transition:fade={{ duration: 300, easing: linear }}>
+                <div class="flex flex-col gap-5 rounded-lg bg-gray-600 p-3">
                     <h2 class="w-full text-center text-4xl text-red-600">Confirm</h2>
-                    <span class="w-full text-center">You sure you want to delete this image?</span>
-                    <div class="flex items-center justify-center gap-3">
+                    <p class="w-full text-center">
+                        Are you sure you want to delete this image?<br /> This action is irreversible.
+                    </p>
+                    <div class="flex items-center justify-evenly gap-3">
                         <button
                             class="rounded-lg bg-green-600 p-2 hover:bg-green-500"
-                            on:click={() => (hidden = true)}
+                            on:click={() => (isShow = false)}
                         >
                             Cancel
                         </button>
