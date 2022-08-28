@@ -6,7 +6,6 @@ export const genID = (fileExt: string, author: string, length = 20) => {
     const charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
         imageID += characters.charAt(Math.floor(Math.random() * charactersLength));
-
         invisibleID += invisibleChars.charAt(Math.floor(Math.random() * invisibleChars.length));
     }
 

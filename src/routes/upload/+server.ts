@@ -1,10 +1,10 @@
 import sharp from "sharp";
 import type { RequestHandler } from "./$types";
 
-import { prisma } from "$lib/server/prisma";
-import { supabase } from "$lib/server/supabase";
-
 import { SUPABASE_URL } from "$env/static/private";
+
+import { prisma } from "$lib/db/prisma";
+import { supabase } from "$lib/db/supabase";
 import { errorReponse } from "$lib/utils/errorResponse";
 import { genID } from "$lib/utils/genID";
 
@@ -40,18 +40,17 @@ export const POST: RequestHandler = async ({ request, url }) => {
     }
     sharpImage.webp({ effort: 3, quality: 85, alphaQuality: 90 });
 
-    // todo: Fix gif not uploading to supabase storage.
     await Promise.all([
         prisma.image.create({
             data: {
                 name: image.name,
                 type: image.type,
-                path: path,
                 author: user.name,
                 key: user.key,
                 publicUrl: `${SUPABASE_URL}/storage/v1/object/public/images/${path}`,
-                imageID: imageID,
-                invisibleID: invisibleID,
+                path,
+                imageID,
+                invisibleID,
             },
         }),
         supabase.upload(path, await sharpImage.toBuffer(), {
@@ -62,7 +61,7 @@ export const POST: RequestHandler = async ({ request, url }) => {
 
     const link = `${url.origin}/${invisibleID}`;
 
-    if (!request.headers.get("local")) {
+    if (!request.headers.has("dev")) {
         return new Response(JSON.stringify({ link, delete: `${url.origin}/i/${imageID}/delete` }), {
             status: 200,
             headers: {

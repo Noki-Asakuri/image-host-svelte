@@ -1,23 +1,48 @@
-import { createTRPCClient } from "@trpc/client";
-
-import type { Router } from "$lib/router/index"; // 👈 only the types are imported from the server
+// src/utils/trpc.ts
+import type { AppRouter } from "$lib/trpc/routers";
 import type { inferProcedureInput, inferProcedureOutput } from "@trpc/server";
 
-export const trpc = createTRPCClient<Router>({ url: "/trpc" });
+import { httpBatchLink, loggerLink } from "@trpc/client";
+import { createTRPCProxyClient } from "@trpc/client";
 
-type Query = keyof Router["_def"]["queries"];
-type Mutation = keyof Router["_def"]["mutations"];
+export const trpc = createTRPCProxyClient<AppRouter>({
+    url: "/trpc",
+    links: [
+        loggerLink({
+            enabled: (opts) =>
+                process.env.NODE_ENV === "development" ||
+                (opts.direction === "down" && opts.result instanceof Error),
+        }),
+        httpBatchLink({ url: "/trpc" }),
+    ],
+});
 
-// Useful types 👇👇👇
-export type InferQueryOutput<RouteKey extends Query> = inferProcedureOutput<
-    Router["_def"]["queries"][RouteKey]
->;
-export type InferQueryInput<RouteKey extends Query> = inferProcedureInput<
-    Router["_def"]["queries"][RouteKey]
->;
-export type InferMutationOutput<RouteKey extends Mutation> = inferProcedureOutput<
-    Router["_def"]["mutations"][RouteKey]
->;
-export type InferMutationInput<RouteKey extends Mutation> = inferProcedureInput<
-    Router["_def"]["mutations"][RouteKey]
->;
+/**
+ * Enum containing all api procedures
+ */
+export type TProcedures = keyof AppRouter["_def"]["procedures"];
+
+/**
+ * Enum containing all procedure paths
+ */
+export type TRouterPaths<TRouterKey extends TProcedures> =
+    keyof AppRouter[TRouterKey]["_def"]["procedures"];
+
+/**
+ * This is a helper method to infer the output of a procedure
+ * @example type HelloOutput = InferProceduresOutput<'hello'>
+ */
+export type InferProceduresOutput<
+    TRouteKey extends TProcedures,
+    TRoutePath extends TRouterPaths<TRouteKey>,
+> = inferProcedureOutput<AppRouter[TRouteKey][TRoutePath]>;
+
+/**
+ * This is a helper method to infer the input of a procedure
+ * @example type HelloOutput = InferProceduresInput<'hello'>
+ */
+export type InferProceduresInput<
+    TRouteKey extends TProcedures,
+    TRoutePath extends TRouterPaths<TRouteKey>,
+    // @ts-expect-error: Idek why this raise error ¯\_(ツ)_/¯
+> = inferProcedureInput<AppRouter[TRouteKey][TRoutePath]>;

@@ -1,11 +1,11 @@
-import { prisma } from "$lib/server/prisma";
+import { prisma } from "$lib/db/prisma";
 import type { PageServerLoad } from "./$types";
 
 import { error, redirect } from "@sveltejs/kit";
-import { supabase } from "$lib/server/supabase";
+import { supabase } from "$lib/db/supabase";
 
 export const load: PageServerLoad = async ({ params, url }) => {
-    const image = await prisma.image.findFirst({
+    const image = await prisma.image.findUnique({
         where: { imageID: params.imageID },
         select: { publicUrl: true, author: true, name: true, imageID: true, path: true },
     });

@@ -1,12 +1,12 @@
 <script lang="ts">
     import SpinningIcon from "$lib/components/SpinningIcon.svelte";
-    import type { InferMutationInput } from "$lib/utils/trpc";
+    import type { InferProceduresInput } from "$lib/utils/trpc";
 
     let user = "";
     let password = "";
 
     export let isLoading: boolean;
-    export let createKey: ({ user, password }: InferMutationInput<"key.create">) => void;
+    export let createKey: ({ user, password }: InferProceduresInput<"key", "create">) => void;
 </script>
 
 <form
@@ -36,7 +36,11 @@
             bind:value={password}
         />
     </div>
-    <button class="h-10 w-full rounded-2xl bg-slate-700 py-2 drop-shadow-lg" type="submit">
+    <button
+        class="h-10 w-full rounded-2xl bg-slate-700 py-2 drop-shadow-lg"
+        type="submit"
+        disabled={isLoading}
+    >
         {#if !isLoading}
             Create
         {:else}

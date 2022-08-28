@@ -1,4 +1,4 @@
-import { prisma } from "$lib/server/prisma";
+import { prisma } from "$lib/db/prisma";
 import { errorReponse } from "$lib/utils/errorResponse";
 
 import { redirect } from "@sveltejs/kit";

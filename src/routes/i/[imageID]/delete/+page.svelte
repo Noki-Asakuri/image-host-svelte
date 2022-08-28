@@ -10,15 +10,13 @@
     let isShow = false;
     let isDeleted = false;
 
-    const mutation = async () => {
-        await trpc.mutation("image.delete", { imageID: data.imageID, path: data.path });
-        isDeleted = true;
-    };
-
     const deleteImage = async () => {
         isShow = false;
         await toast.promise(
-            mutation(),
+            (async () => {
+                await trpc.image.delete.mutate({ imageID: data.imageID, path: data.path });
+                isDeleted = true;
+            })(),
             {
                 loading: "Deleting ...",
                 error: "Unable to delete image.",
