@@ -7,7 +7,13 @@ import { supabase } from "$lib/db/supabase";
 export const load: PageServerLoad = async ({ params, url }) => {
     const image = await prisma.image.findUnique({
         where: { imageID: params.imageID },
-        select: { publicUrl: true, author: true, name: true, imageID: true, path: true },
+        select: {
+            publicUrl: true,
+            name: true,
+            imageID: true,
+            path: true,
+            user: { select: { name: true } },
+        },
     });
 
     if (!image) {

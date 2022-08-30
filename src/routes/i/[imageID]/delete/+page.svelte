@@ -36,7 +36,7 @@
         <meta name="title" content={data.name} />
 
         <meta content={data.name} property="og:title" />
-        <meta content={data.author} property="og:site_name" />
+        <meta content={data.user.name} property="og:site_name" />
         <meta content={data.publicUrl} property="og:image" />
         <meta name="twitter:card" content="summary_large_image" />
     {:else}

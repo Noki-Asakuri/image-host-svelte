@@ -6,7 +6,7 @@ import { error } from "@sveltejs/kit";
 export const load: PageServerLoad = async ({ params }) => {
     const image = await prisma.image.findUnique({
         where: { imageID: params.imageID },
-        select: { publicUrl: true, author: true, name: true },
+        select: { publicUrl: true, name: true, user: { select: { name: true } } },
     });
 
     if (!image) {

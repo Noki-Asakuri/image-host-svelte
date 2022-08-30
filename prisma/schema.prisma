@@ -16,27 +16,22 @@ model User {
     name String @unique
     key  String @unique @default(uuid())
 
-    Useer Image[] @relation(name: "User")
-    Key   Image[] @relation(name: "Key")
+    Key Image[] @relation()
 }
 
 model Image {
     id Int @id @default(autoincrement())
 
-    name   String
-    type   String
-    author String
-    path   String
-    key    String
+    name     String
+    path     String
+    key      String
+    uploadAt DateTime @default(now())
 
     publicUrl   String @unique
     imageID     String @unique
     invisibleID String @unique
 
-    uploadAt DateTime @default(now())
-
-    user    User @relation(fields: [author], references: [name], onDelete: Cascade, name: "User")
-    api_key User @relation(fields: [key], references: [key], onDelete: Cascade, name: "Key")
+    user User @relation(fields: [key], references: [key], onDelete: Cascade)
 
     @@index([imageID, invisibleID])
 }

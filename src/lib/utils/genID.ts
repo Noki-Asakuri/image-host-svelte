@@ -1,6 +1,7 @@
-export const genID = (fileExt: string, author: string, length = 20) => {
+export const genID = (fileExt: string, author: string, baseUrl: string, length = 20) => {
     let imageID = "";
     let invisibleID = "";
+
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const invisibleChars = "​​‌‍⁠";
     const charactersLength = characters.length;
@@ -9,10 +10,9 @@ export const genID = (fileExt: string, author: string, length = 20) => {
         invisibleID += invisibleChars.charAt(Math.floor(Math.random() * invisibleChars.length));
     }
 
-    return {
-        imageID,
-        invisibleID,
-        file: `${imageID}.${fileExt}`,
-        path: `${author.split("#")[0]}/${imageID}.${fileExt}`,
-    };
+    const file = `${imageID}.${fileExt}`;
+    const path = `${author.split("#")[0]}/${imageID}.${fileExt}`;
+    const publicUrl = `${baseUrl}${path}`;
+
+    return { imageID, invisibleID, file, path, publicUrl };
 };

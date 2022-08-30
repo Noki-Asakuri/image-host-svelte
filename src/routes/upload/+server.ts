@@ -22,7 +22,7 @@ export const POST: RequestHandler = async ({ request, url }) => {
         select: { name: true, key: true },
     });
 
-    if (!user) return errorReponse(401, "API KEY is invalided.");
+    if (!user) return errorReponse(401, "API Key is invalided.");
 
     const allowedImageTypes = ["image/png", "image/jpeg", "image/webp"];
     const image = (await request.formData()).get("image") as File;
@@ -31,7 +31,11 @@ export const POST: RequestHandler = async ({ request, url }) => {
         return errorReponse(400, "Only accept image with type: png, jpg and webp.");
     }
 
-    const { imageID, invisibleID, path } = genID(image.type.split("/")[1], user.name);
+    const { imageID, invisibleID, path, publicUrl } = genID(
+        image.type.split("/")[1],
+        user.name,
+        `${SUPABASE_URL}/storage/v1/object/public/images/`,
+    );
     const sharpImage = sharp(Buffer.from(await image.arrayBuffer()));
     const { width } = await sharpImage.metadata();
 
@@ -42,16 +46,7 @@ export const POST: RequestHandler = async ({ request, url }) => {
 
     await Promise.all([
         prisma.image.create({
-            data: {
-                name: image.name,
-                type: image.type,
-                author: user.name,
-                key: user.key,
-                publicUrl: `${SUPABASE_URL}/storage/v1/object/public/images/${path}`,
-                path,
-                imageID,
-                invisibleID,
-            },
+            data: { name: image.name, key: user.key, publicUrl, path, imageID, invisibleID },
         }),
         supabase.upload(path, await sharpImage.toBuffer(), {
             contentType: "image/webp",
@@ -59,25 +54,28 @@ export const POST: RequestHandler = async ({ request, url }) => {
         }),
     ]);
 
-    const link = `${url.origin}/${invisibleID}`;
+    const responseUrl = {
+        link: `${url.origin}/${invisibleID}`,
+        delete: `${url.origin}/i/${imageID}/delete`,
+    };
 
-    if (!request.headers.has("dev")) {
-        return new Response(JSON.stringify({ link, delete: `${url.origin}/i/${imageID}/delete` }), {
+    if (request.headers.has("dev")) {
+        return new Response(responseUrl.link, {
             status: 200,
             headers: {
                 "Keep-Alive": "timeout=86400",
                 Connection: "keep-alive",
-                "Content-Type": "application/json",
+                "Content-Type": "text/plain",
             },
         });
     }
 
-    return new Response(link, {
+    return new Response(JSON.stringify({ responseUrl }), {
         status: 200,
         headers: {
             "Keep-Alive": "timeout=86400",
             Connection: "keep-alive",
-            "Content-Type": "text/plain",
+            "Content-Type": "application/json",
         },
     });
 };
