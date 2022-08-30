@@ -70,7 +70,7 @@ export const POST: RequestHandler = async ({ request, url }) => {
         });
     }
 
-    return new Response(JSON.stringify({ responseUrl }), {
+    return new Response(JSON.stringify({ ...responseUrl }), {
         status: 200,
         headers: {
             "Keep-Alive": "timeout=86400",
