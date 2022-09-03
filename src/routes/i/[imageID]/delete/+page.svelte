@@ -69,7 +69,7 @@
         {/if}
 
         {#if isShow}
-            <div use:portal={"body"} class="absolute inset-0 flex justify-center items-center">
+            <div use:portal={"body"} class="absolute inset-0 flex items-center justify-center">
                 <div
                     transition:fade={{ duration: 300, easing: linear }}
                     on:click={() => (isShow = false)}
@@ -77,19 +77,19 @@
                 />
                 <div class="fixed z-50 w-80" transition:fade={{ duration: 300, easing: linear }}>
                     <div class="flex flex-col gap-5 rounded-lg bg-gray-600 p-5">
-                        <h2 class="w-full text-center text-4xl text-red-600 font-bold">Confirm</h2>
+                        <h2 class="w-full text-center text-4xl font-bold text-red-600">Confirm</h2>
                         <p class="w-full text-center">
                             Are you sure you want to delete this image?<br /> This action is irreversible.
                         </p>
                         <div class="flex items-center justify-evenly gap-3">
                             <button
-                                class="rounded-lg bg-green-600 p-2 hover:bg-green-500 transition-colors duration-300"
+                                class="rounded-lg bg-green-600 p-2 transition-colors duration-300 hover:bg-green-500"
                                 on:click={() => (isShow = false)}
                             >
                                 Cancel
                             </button>
                             <button
-                                class="rounded-lg bg-red-600 p-2 hover:bg-red-500 transition-colors duration-300"
+                                class="rounded-lg bg-red-600 p-2 transition-colors duration-300 hover:bg-red-500"
                                 on:click={() => deleteImage()}
                             >
                                 Delete
