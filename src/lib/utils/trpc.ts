@@ -30,7 +30,7 @@ export type TRouterPaths<TRouterKey extends TProcedures> =
 
 /**
  * This is a helper method to infer the output of a procedure
- * @example type HelloOutput = InferProceduresOutput<'hello'>
+ * @example type HelloOutput = InferProceduresOutput<"example", "getAll">
  */
 export type InferProceduresOutput<
     TRouteKey extends TProcedures,
@@ -39,7 +39,7 @@ export type InferProceduresOutput<
 
 /**
  * This is a helper method to infer the input of a procedure
- * @example type HelloOutput = InferProceduresInput<'hello'>
+ * @example type HelloOutput = InferProceduresInput<"example", "getAll">
  */
 export type InferProceduresInput<
     TRouteKey extends TProcedures,

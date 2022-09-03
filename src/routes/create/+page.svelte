@@ -1,10 +1,9 @@
 <script lang="ts">
-    import type { InferProceduresInput, InferProceduresOutput } from "$lib/utils/trpc";
-    import { trpc } from "$lib/utils/trpc";
+    import { ogImageUrl } from "$lib/store/image";
+    import { trpc, type InferProceduresInput, type InferProceduresOutput } from "$lib/utils/trpc";
 
     import Info from "$lib/components/Info.svelte";
     import Upload from "$lib/components/Upload.svelte";
-    import { ogImageUrl } from "$lib/store/image";
 
     import toast, { Toaster } from "svelte-french-toast";
 

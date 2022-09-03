@@ -3,6 +3,7 @@
     import type { PageData } from "./$types";
 
     import toast, { Toaster } from "svelte-french-toast";
+    import { portal } from "svelte-portal/src/Portal.svelte";
     import { linear } from "svelte/easing";
     import { fade } from "svelte/transition";
 
@@ -66,31 +67,34 @@
                 Click to delete
             </button>
         {/if}
+
         {#if isShow}
-            <div
-                transition:fade={{ duration: 300, easing: linear }}
-                on:click={() => (isShow = false)}
-                class="absolute h-screen w-screen bg-black/60"
-            />
-            <div class="absolute z-50" transition:fade={{ duration: 300, easing: linear }}>
-                <div class="flex flex-col gap-5 rounded-lg bg-gray-600 p-3">
-                    <h2 class="w-full text-center text-4xl text-red-600">Confirm</h2>
-                    <p class="w-full text-center">
-                        Are you sure you want to delete this image?<br /> This action is irreversible.
-                    </p>
-                    <div class="flex items-center justify-evenly gap-3">
-                        <button
-                            class="rounded-lg bg-green-600 p-2 hover:bg-green-500"
-                            on:click={() => (isShow = false)}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            class="rounded-lg bg-red-600 p-2 hover:bg-red-500"
-                            on:click={() => deleteImage()}
-                        >
-                            Delete
-                        </button>
+            <div use:portal={"body"} class="absolute inset-0 flex justify-center items-center">
+                <div
+                    transition:fade={{ duration: 300, easing: linear }}
+                    on:click={() => (isShow = false)}
+                    class="fixed h-screen w-screen bg-black/50"
+                />
+                <div class="fixed z-50 w-80" transition:fade={{ duration: 300, easing: linear }}>
+                    <div class="flex flex-col gap-5 rounded-lg bg-gray-600 p-5">
+                        <h2 class="w-full text-center text-4xl text-red-600 font-bold">Confirm</h2>
+                        <p class="w-full text-center">
+                            Are you sure you want to delete this image?<br /> This action is irreversible.
+                        </p>
+                        <div class="flex items-center justify-evenly gap-3">
+                            <button
+                                class="rounded-lg bg-green-600 p-2 hover:bg-green-500 transition-colors duration-300"
+                                on:click={() => (isShow = false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                class="rounded-lg bg-red-600 p-2 hover:bg-red-500 transition-colors duration-300"
+                                on:click={() => deleteImage()}
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
