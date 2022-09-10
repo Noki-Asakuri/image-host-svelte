@@ -1,4 +1,4 @@
-export const errorReponse = (status: number, message?: string | undefined) => {
+export const errorResponse = (status: number, message?: string | undefined) => {
     return new Response(JSON.stringify({ message }), {
         status,
         headers: {

@@ -5,30 +5,30 @@ import { SUPABASE_URL } from "$env/static/private";
 
 import { prisma } from "$lib/db/prisma";
 import { supabase } from "$lib/db/supabase";
-import { errorReponse } from "$lib/utils/errorResponse";
+import { errorResponse } from "$lib/utils/errorResponse";
 import { genID } from "$lib/utils/genID";
 
 export const GET: RequestHandler = async () => {
-    return errorReponse(501, "Make a POST request to upload.");
+    return errorResponse(501, "Make a POST request to upload.");
 };
 
 export const POST: RequestHandler = async ({ request, url }) => {
     const API_KEY = request.headers.get("api_key");
 
-    if (!API_KEY) return errorReponse(400, "API Key is required.");
+    if (!API_KEY) return errorResponse(400, "API Key is required.");
 
     const user = await prisma.user.findFirst({
         where: { key: API_KEY },
         select: { name: true, key: true },
     });
 
-    if (!user) return errorReponse(401, "API Key is invalided.");
+    if (!user) return errorResponse(401, "API Key is invalided.");
 
     const allowedImageTypes = ["image/png", "image/jpeg", "image/webp"];
     const image = (await request.formData()).get("image") as File;
 
     if (!allowedImageTypes.includes(image.type)) {
-        return errorReponse(400, "Only accept image with type: png, jpg and webp.");
+        return errorResponse(400, "Only accept image with type: png, jpg and webp.");
     }
 
     const { imageID, invisibleID, path, publicUrl } = genID(

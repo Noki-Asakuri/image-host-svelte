@@ -6,7 +6,11 @@ const config = {
     // Consult https://github.com/sveltejs/svelte-preprocess
     // for more information about preprocessors
     preprocess: [preprocess({ postcss: true })],
-    kit: { adapter: adapter(), files: { hooks: "src/hooks" }, csrf: { checkOrigin: false } },
+    kit: {
+        adapter: adapter(),
+        files: { hooks: { server: "src/hooks" } },
+        csrf: { checkOrigin: false },
+    },
 };
 
 export default config;
