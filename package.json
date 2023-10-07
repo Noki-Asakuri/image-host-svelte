@@ -22,7 +22,7 @@
         "autoprefixer": "^10.4.8",
         "eslint": "^8.23.0",
         "eslint-plugin-svelte3": "^4.0.0",
-        "postcss": "^8.4.16",
+        "postcss": "^8.4.31",
         "prettier": "^2.7.1",
         "prettier-plugin-tailwindcss": "^0.1.13",
         "prisma": "^4.3.1",
